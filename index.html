@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>The Office trivia</title>
+	</head>
+	<body>
+
+		<style>
+
+			span {
+				color: white;
+				font-size: 70px;
+				font-family: cursive;
+				animation: blink 1s linear infinite;
+				cursor: pointer;
+			}
+
+			#divTrivia {
+				text-align: center;
+			}
+
+			@keyframes blink {
+				0% {opacity: 0;}
+				50% {opacity: .5;}
+				100% {opacity: 1;}
+			}
+
+			body {
+				background-color: black;
+			}
+
+			#dunder {
+				display: block;
+				margin: auto;
+				width: 700px;
+			}
+
+			button {
+				cursor: pointer;
+			}
+
+			#preguntas {
+				text-align: center;
+			}
+
+			#inputDiv {
+				text-align: center;
+			}
+
+			#divImagenDwight {
+
+				text-align: center;
+
+			}
+
+			#divImagenDM {
+				
+				text-align: center;
+			}
+
+
+		</style>
+
+		<audio id="audio">
+			<source src="audio.mp3" type="audio/mpeg">
+		</audio>
+
+		<audio id="audio2">
+			<source src="audio2.mp3" type="audio/mpeg">
+		</audio>
+
+		<audio id="audio3">
+			<source src="audio3.mp3" type="audio/mpeg">
+		</audio>
+
+		<audio id="audio4">
+			<source src="audio4.mp3" type="audio/mpeg">
+		</audio>
+
+
+		<img id = "dunder" src = "image.jpg" alt = "Imagen del cartel de The Office">
+
+		<div id = "divTrivia">
+			<span id = "trivia" onclick="one()">Trivia</span>
+		</div>
+
+		<div id="divImagenDwight"></div>
+
+		<div id="preguntas">
+			<p id="texto"></p>
+		</div>
+		
+		<div id="inputDiv"></div>
+
+		<div id="divImagenDM"></div>
+	
+
+		<script>
+
+			var preguntasYRespuestas = [ 
+										 ["¿Con quien estuvo comprometida Pam y nunca se casó?", "roy"],
+										 ["¿Cuál es el segundo nombre de Dwight?", "kurt"],
+										 ["En un intento de broma pesada ¿Cual es el motivo por el que Michael le dice a Pam que la va a despedir?", "robar post-it notes"],
+										 ["¿A cuál de los gatos de Angela mató Dwight?", "sprinkles"],
+										 ["¿Quien queda a cargo de la sucursal de Scranton, cuando Michael se muda a Colorado con Holly?", "deangelo"],
+										 ["¿Como se llama el primo de Dwight?", "mose"],
+										 ["¿Como murio Ed truck? El primer jefe de Michael en Dunder Mifflin", "decapitado"],
+										 ["En lugar del premio a 'El compromiso mas largo', que Michael le entregaba todos los años, que Dundie recibe Pam?", "las zapatillas mas blancas"],
+										 ["¿Cuantos hermanos tiene Jim?", "dos"],
+										 ["¿Cual es el nombre de la asistente personal que contrata Deangelo?", "jordan"],
+										 ["En el video presentacion de Sabre, ¿Que celebridad aparece actuando de él mismo?", "christian slater"],
+										 ["¿Cual es el nombre del encargado del servicio tecnico, que nadie en la oficina podía recordar?", "nick"]
+										 
+									   ]
+			var indicePregunta = 0;
+
+			var listaDeErrores = [];
+
+			var audio = document.getElementById("audio");
+			var audio2 = document.getElementById("audio2");
+			var audio3 = document.getElementById("audio3");
+			var audio4 = document.getElementById("audio4");
+			var image = document.getElementById("dunder");
+			var trivia = document.getElementById("trivia");
+			var texto = document.getElementById("texto");
+			var inputDiv = document.getElementById("inputDiv")
+			var input = document.createElement("input");
+			var button = document.createElement("button");
+			var texto2 = document.createElement("p")
+			var imagenDwight = document.createElement("img")
+			var imagenDM = document.createElement("img")
+
+			texto.style.fontSize="25px";
+			
+
+			function one() {				
+				image.remove();
+				trivia.remove();
+				audio2.play();
+				document.body.background="image2.jpg";
+				document.body.style.backgroundColor = "#A9A9A9";
+				document.body.style.backgroundRepeat = "no-repeat";
+				document.body.style.backgroundPosition="50% 0%";
+				setTimeout(iniciarTrivia, 6000);
+			}
+
+			function iniciarTrivia() {
+				audio2.remove();
+				mostrarPregunta();
+			}
+
+			function mostrarPregunta() {
+				// Vaciamos el input
+				input.value = "";
+				button.style.display = "";
+				input.style.display = "";
+				texto.style.display = "";
+				imagenDwight.style.display = "";
+				//"Dwight dice 'Question'"
+				audio3.play();
+				imagenDwight.src="image3.jpg";
+				divImagenDwight.appendChild(imagenDwight);
+
+				document.body.background="";
+				document.body.style.backgroundColor = "#8FBC8F";
+				texto.innerHTML = preguntasYRespuestas[indicePregunta][0];
+
+				input.setAttribute('type', 'text');
+			    input.setAttribute('placeholder', 'respuesta');
+			    input.setAttribute('size', '40');
+			    
+			    inputDiv.appendChild(input);
+			    input.focus()
+			    button.innerHTML = "Enviar";
+			    inputDiv.appendChild(button);
+
+
+			    button.id="button";
+			    button.onclick = function(){evaluarRespuesta(indicePregunta)};
+			}
+
+			function evaluarRespuesta() {
+				if(input.value.toLowerCase() === preguntasYRespuestas[indicePregunta][1] ) {
+					indicePregunta++;
+					if (indicePregunta === preguntasYRespuestas.length) {
+						finJuego();
+					} else {
+						mostrarPregunta();
+					}
+				} else {
+					mostrarError();
+				}
+			}
+
+			function mostrarError() {
+				audio4.play();
+				document.body.background="image4.jpg";
+				document.body.style.backgroundSize="900px";
+				document.body.style.backgroundColor = "#DEB887";
+				button.style.display = "none";
+				input.style.display = "none";
+				texto.style.display = "none";
+				imagenDwight.style.display = "none";
+				listaDeErrores.push(indicePregunta);
+				indicePregunta++;
+				if (indicePregunta === preguntasYRespuestas.length) {
+					setTimeout(finJuego, 1000);
+				} else {
+					setTimeout(mostrarPregunta, 1000);
+				}
+			}
+
+			function finJuego() {
+				imagenDwight.remove();
+				document.body.background="";
+				document.body.style.backgroundColor = "black";
+				audio.play()
+				imagenDM.src = "image5.jpg"
+				divImagenDM.appendChild(imagenDM)
+				button.style.display = "none";
+				input.style.display = "none";
+				texto.style.display = "none";
+				texto2.style.color="white";
+			    texto2.style.fontSize="20px"
+			    document.body.appendChild(texto2); 
+			    if(listaDeErrores.length === 0) {
+					texto2.innerHTML="Felicitaciones!!!!!<br>Tuviste 0 errores.<br> Sos un verdadero fanático de The Office"
+				}else {
+					var mensajeDeError = "Fallaste en:<br>"
+					for(indice of listaDeErrores) {
+						mensajeDeError += preguntasYRespuestas[indice][0] + "<br>" + 
+										  "Respuesta correcta: " + preguntasYRespuestas[indice][1] + "<br>"
+					}
+
+					texto2.innerHTML= mensajeDeError
+				} 
+				
+			}
+
+			input.addEventListener("keyup", function(event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					document.getElementById("button").click();
+				}
+			});
+
+
+			
+		</script>
+	</body>
+</html>
